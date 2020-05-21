@@ -17,6 +17,7 @@
     "pug": "^2.0.4"
   },
   "devDependencies": {
+    "debug": "^4.1.1",
     "nodemon": "^2.0.4"
   }
 }
