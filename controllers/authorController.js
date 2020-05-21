@@ -10,7 +10,7 @@ module.exports = {
         Author.find()
             .populate('author')
             .sort([['family_name', 'ascending']])
-            .exec(function (err, list_authors) {
+            .exec((err, list_authors) => {
                 if (err) { return next(err); }
                 
                 res.render('author_list', { title: 'Author List', author_list: list_authors });
@@ -20,15 +20,15 @@ module.exports = {
     // Display detail page for a specific Author.
     author_detail: (req, res, next) => {
         async.parallel({
-            author: function(callback) {
+            author: (callback) => {
                 Author.findById(req.params.id)
                 .exec(callback)
             },
-            authors_books: function(callback) {
+            authors_books: (callback) => {
             Book.find({ 'author': req.params.id },'title summary')
             .exec(callback)
             },
-        }, function(err, results) {
+        }, (err, results) => {
             if (err) { return next(err); } // Error in API usage.
             if (results.author == null) { // No results.
                 var err = new Error('Author not found');

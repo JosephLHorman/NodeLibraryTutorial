@@ -9,7 +9,7 @@ module.exports = {
     genre_list: (req, res, next) => {
         Genre.find()
           .sort([['name', 'ascending']])
-          .exec(function (err, list_genres) {
+          .exec((err, list_genres) => {
             if (err) { return next(err); }
             
             res.render('genre_list', { title: 'Genre List', genre_list: list_genres });
@@ -19,15 +19,15 @@ module.exports = {
     // Display detail page for a specific Genre.
     genre_detail: (req, res, next) => {
         async.parallel({
-            genre: function(callback) {
+            genre: (callback) => {
                 Genre.findById(req.params.id)
                 .exec(callback);
             },
-            genre_books: function(callback) {
+            genre_books: (callback) => {
                 Book.find({'genre': req.params.id})
                 .exec(callback);
             }
-        }, function(err, results) {
+        }, (err, results) => {
             if(err) {return next(err); }
 
             if(results.genre == null) {

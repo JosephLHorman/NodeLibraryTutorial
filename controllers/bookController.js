@@ -8,22 +8,12 @@ const BookInstance = require('../models/bookinstance');
 module.exports = {
     index: (req, res) => {  
         async.parallel({
-            book_count: function(callback) {
-                Book.countDocuments({}, callback); // Pass an empty object as match condition to find all documents of this collection
-            },
-            book_instance_count: function(callback) {
-                BookInstance.countDocuments({}, callback);
-            },
-            book_instance_available_count: function(callback) {
-                BookInstance.countDocuments({status:'Available'}, callback);
-            },
-            author_count: function(callback) {
-                Author.countDocuments({}, callback);
-            },
-            genre_count: function(callback) {
-                Genre.countDocuments({}, callback);
-            }
-        }, function(err, results) {
+            book_count: (callback) => Book.countDocuments({}, callback), // Pass an empty object as match condition to find all documents of this collection
+            book_instance_count: (callback) => BookInstance.countDocuments({}, callback),
+            book_instance_available_count: (callback) => BookInstance.countDocuments({status:'Available'}, callback),
+            author_count: (callback) => Author.countDocuments({}, callback),
+            genre_count: (callback) => Genre.countDocuments({}, callback)
+        }, (err, results) => {
             res.render('index', { title: 'Local Library Home', error: err, data: results });
         });
     },
@@ -31,27 +21,27 @@ module.exports = {
     // Display list of all Books.
     book_list: (req, res, next) => {
         Book.find({}, 'title author')
-          .populate('author')
-          .exec(function (err, list_books) {
-            if (err) { return next(err); }
-            //Successful, so render
-            res.render('book_list', { title: 'Book List', book_list: list_books });
-          });
-      },
+            .populate('author')
+            .exec((err, list_books) => {
+                if (err) { return next(err); }
+                //Successful, so render
+                res.render('book_list', { title: 'Book List', book_list: list_books });
+        });
+    },
 
-      book_detail: (req, res, next) => {
+    book_detail: (req, res, next) => {
         async.parallel({
-            book: function(callback) {
+            book: (callback) => {
                 Book.findById(req.params.id)
-                  .populate('author')
-                  .populate('genre')
-                  .exec(callback);
+                    .populate('author')
+                    .populate('genre')
+                    .exec(callback);
             },
-            book_instance: function(callback) {
-              BookInstance.find({ 'book': req.params.id })
-              .exec(callback);
+            book_instance: (callback) => {
+                BookInstance.find({ 'book': req.params.id })
+                    .exec(callback);
             },
-        }, function(err, results) {
+        }, (err, results) => {
             if (err) { return next(err); }
             if (results.book == null) { // No results.
                 var err = new Error('Book not found');
