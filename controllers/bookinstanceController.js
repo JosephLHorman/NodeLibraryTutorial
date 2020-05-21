@@ -18,7 +18,7 @@ module.exports = {
             .populate('book')
             .exec(function (err, bookinstance) {
                 if (err) { return next(err); }
-                if (bookinstance==null) { // No results.
+                if (bookinstance == null) { // No results.
                     var err = new Error('Book copy not found');
                     err.status = 404;
                     return next(err);

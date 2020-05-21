@@ -53,7 +53,7 @@ module.exports = {
             },
         }, function(err, results) {
             if (err) { return next(err); }
-            if (results.book==null) { // No results.
+            if (results.book == null) { // No results.
                 var err = new Error('Book not found');
                 err.status = 404;
                 return next(err);

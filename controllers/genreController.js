@@ -30,7 +30,7 @@ module.exports = {
         }, function(err, results) {
             if(err) {return next(err); }
 
-            if(results.genre==null) {
+            if(results.genre == null) {
                 var err = new Error("Genre not found");
                 err.status = 404;
                 return next(err);

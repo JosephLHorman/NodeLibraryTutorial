@@ -1,8 +1,8 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
@@ -11,7 +11,7 @@ const catalogRouter = require('./routes/catalog');
 const app = express();
 
 //Set up mongoose con
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 var mongoDB = 'mongodb+srv://practiceUser:practice@cluster0-objei.mongodb.net/local_library?retryWrites=true&w=majority';
 mongoose.connect(mongoDB, {useNewUrlParser: true });
 var db = mongoose.connection;

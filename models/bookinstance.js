@@ -1,5 +1,5 @@
-var mongoose = require('mongoose');
-var moment = require('moment');
+const mongoose = require('mongoose');
+const moment = require('moment');
 
 var Schema = mongoose.Schema;
 

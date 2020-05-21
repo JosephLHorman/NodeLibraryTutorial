@@ -30,7 +30,7 @@ module.exports = {
             },
         }, function(err, results) {
             if (err) { return next(err); } // Error in API usage.
-            if (results.author==null) { // No results.
+            if (results.author == null) { // No results.
                 var err = new Error('Author not found');
                 err.status = 404;
                 return next(err);
