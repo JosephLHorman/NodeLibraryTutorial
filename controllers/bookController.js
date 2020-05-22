@@ -138,7 +138,27 @@ module.exports = {
             res.render('book_delete', {title: "Delete Book", book: results.book, bookinstances: results.bookinstances});
         });
     },
-    book_delete_post: (req, res) => res.send("NOT IMPLEMENTED: Book delete POST"),
+    book_delete_post: (req, res, next) => {
+        async.parallel({
+            book: (callback) => Book.findById(req.body.bookid).exec(callback),
+            bookinstances: (callback) => BookInstance.find({'book': req.body.bookid}).exec(callback)
+        }, (err, results) => {
+            if(err) {return next(err);}
+
+            //Success
+            if (results.bookinstances.length > 0) {
+                //Book still has intances. Render and send same as GET route
+                res.render('book_delete', {title: "Delete Book", book: results.book, bookinstances: results.bookinstances});
+                return;
+            } else {
+                Book.findByIdAndRemove(req.body.bookid, function deleteBook(err) {
+                    if(err) {return next(err);}
+
+                    res.redirect('/catalog/books');
+                })
+            }
+        })
+    },
 
     book_update_get: (req, res, next) => {
         //Get the book, authors and genres associated
