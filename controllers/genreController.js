@@ -90,7 +90,23 @@ module.exports = {
             res.render('genre_delete', {title: 'Delete Genre', genre: results.genre, genres_books: results.genres_books});
         });
     },
-    genre_delete_post: (req, res) => res.send("NOT IMPLEMENTED: Genre delete POST"),
+    genre_delete_post: (req, res, next) => {
+        async.parallel({
+            genre: (callback) => Genre.findById(req.body.genreid).exec(callback),
+            genres_books: (callback) => Book.find({'genre': req.body.genreid}).exec(callback)
+        }, (err, results) => {
+            if(err) {return next(err);}
+            if(results.genres_books.length > 0) {
+                res.render('genre_delete', {title: 'Delete Genre', genre: results.genre, genres_books: results.genres_books});
+            } else {
+                Genre.findByIdAndRemove(req.body.genreid, function deleteGenre(err) {
+                    if(err) {return next(err);}
+
+                    res.redirect('/catalog/genres');
+                })
+            }
+        })
+    },
 
     genre_update_get: (req, res, next) => {
         async.parallel({
